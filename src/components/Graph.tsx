@@ -5,7 +5,7 @@ cytoscape.use(cola);
 
 function Graph() {
   const containerId = "cy";
-  
+
   const containerStyle = {
     height: 800,
     width: 800,
@@ -32,14 +32,14 @@ function Graph() {
                 label: "data(name)",
                 "text-valign": "center",
                 "text-halign": "left",
-                width: 16,
-                height: 16,
+                width: 6,
+                height: 6,
               },
             },
             {
               selector: "edge",
               style: {
-                width: 1,
+                width: 0.3,
                 "curve-style": "straight",
                 "target-arrow-shape": "triangle",
               },
