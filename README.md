@@ -1,10 +1,10 @@
 # Assignment
 
-* You are **not** obligated to implement all the requirements, quality over quantity.
-* You are free to change anything in the code as long as the **cytoscape library** is still in use with the given example graph.
-* You may use the entire page freely, you can use the graph's canvas as you please. Focus on provide a smooth user experience while implementing the requirements.
-* Instructions are provided on how to get started in sections below.
-* Good Luck!
+- You are **not** obligated to implement all the requirements, quality over quantity.
+- You are free to change anything in the code as long as the **cytoscape library** is still in use with the given example graph.
+- You may use the entire page freely, you can use the graph's canvas as you please. Focus on provide a smooth user experience while implementing the requirements.
+- Instructions are provided on how to get started in sections below.
+- Good Luck!
 
 ## Requirements
 
@@ -27,11 +27,9 @@
 
 1. Make a fork of this repo
 2. Implement your code with proper documentation. Tell us your thought process on implementing one or all of the requirements.
-3. Share your forked repo link with us once you have completed the implementations. 
-
+3. Share your forked repo link with us once you have completed the implementations.
 
 You should checkout cytoscape documentation here https://js.cytoscape.org/
-
 
 # Getting Started with Create React App
 
@@ -79,3 +77,43 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+# Documentation
+
+## Introduction
+
+To facilitate styling, I decided to make use of the TailwindCSS library. Documentation can be found at [https://tailwindcss.com](https://tailwindcss.com/docs/guides/create-react-app)
+
+## Requirements
+
+#### Requirement 1
+
+> Allow the user to click a node and visualize information from it. (name, indegree, outdegree, any other you deem important)
+
+#### Requirement 2
+
+> Highlight all the edges connected to the selected node after click. (currently the node turns blue after clicking, do the same for it edges).
+
+#### Requirement 3
+
+> Allow the user to change the name of a node. (Does not need to be persistent, after refreshing the page the nodes could be the same as they originally were)
+
+#### Requirement 4
+
+> Filter nodes based on their names (Preferably, in real time while the user types)
+
+#### Requirement 5
+
+> Allow the user to select a set of nodes and collapse them all into a single node (cluster) and also, expand that cluster back into the original set of nodes that form it.
+
+#### Requirement 6
+
+> When clicking a cluster get its data exactly as in requirement 1, but this time also, include the amount of nodes within it.
+
+#### Requirement 7
+
+> Export the current graph as a json file. It could be similar to the original one we load, but this time it should also reflect the changes made by the user (clusters, new names, excluding the filtered nodes, etc)
+
+#### Requirement 8
+
+> Import the graph from requirement 7
