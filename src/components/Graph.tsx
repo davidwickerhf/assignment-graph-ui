@@ -29,6 +29,7 @@ function Graph() {
             {
               selector: "node",
               style: {
+                "background-color": "black",
                 label: "data(name)",
                 "text-valign": "center",
                 "text-halign": "left",
@@ -42,6 +43,7 @@ function Graph() {
                 width: 0.3,
                 "curve-style": "straight",
                 "target-arrow-shape": "triangle",
+                "arrow-scale": 0.5,
               },
             },
           ],
@@ -51,6 +53,16 @@ function Graph() {
           var node = evt.target;
           console.log("tapped " + node.id());
         });
+
+        cy.$("node").on("tap", function (e) {
+          var ele = e.target;
+          ele.connectedEdges().style({ "line-color": "red" });
+        });
+
+        // cy.$("node").on("free", function (e) {
+        //   var ele = e.target;
+        //   ele.connectedEdges().style({ "line-color": "#FAFAFA" });
+        // });
       });
   });
 

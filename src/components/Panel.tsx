@@ -1,5 +1,5 @@
 import React from "react";
 
 export const Panel = () => {
-  return <div></div>;
+  return <div>Panel</div>;
 };
