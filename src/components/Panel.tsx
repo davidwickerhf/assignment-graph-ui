@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useAtomValue } from "jotai";
-import { selectedNodeId } from "../constants/atoms";
-import { theme } from "../constants/theme";
+import { selectedNodeList } from "../constants/atoms";
 
 export const Panel = () => {
 	const [data, setData] = useState<any[]>([]);
@@ -15,29 +14,41 @@ export const Panel = () => {
 			},
 		})
 			.then(function (response) {
-				console.log(response);
 				return response.json();
 			})
 			.then(function (myJson) {
-				console.log(myJson);
 				setData(myJson);
 			});
 	};
-	const selected = useAtomValue(selectedNodeId);
+	const selected = useAtomValue(selectedNodeList);
 
 	useEffect(() => {
 		getData();
 	}, []);
 
+	useEffect(() => {
+		console.log(selected);
+	}, [selected]);
+
 	return (
-		<div className="bg-dark-five rounded-lg  text-white">
-			<p className="px-6 py-4">
-				{selected == 0 ? "No node(s) selected" : "Selected 1 node"}
+		<div className="bg-dark-five rounded-lg  text-white min-w-[350px]">
+			<p
+				className={"px-6 py-4" + (selected.length > 0 ? " border-b-[1px]" : "")}
+			>
+				{selected.length == 0
+					? "No node selected"
+					: `Selected ${selected.length} node(s)`}
 			</p>
-			<p>
+			<div className="flex flex-col">
 				{data &&
-					data.filter((e) => e.data.id == selected).map((e) => e.data.name)}
-			</p>
+					data
+						.filter((e) => selected.includes(e.data.id))
+						.map((e) => (
+							<div className="px-6 py-4 flex flex-col gap-2" key={e.data.id}>
+								{e.data.name}
+							</div>
+						))}
+			</div>
 		</div>
 	);
 };
