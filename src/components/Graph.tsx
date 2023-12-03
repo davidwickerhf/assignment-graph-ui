@@ -7,8 +7,8 @@ function Graph() {
   const containerId = "cy";
 
   const containerStyle = {
-    height: 800,
-    width: 800,
+    height: "100vh",
+    width: "100vw",
     margin: "auto",
     border: "1px solid",
   };
@@ -45,6 +45,11 @@ function Graph() {
               },
             },
           ],
+        });
+
+        cy.on("tap", "node", function (evt) {
+          var node = evt.target;
+          console.log("tapped " + node.id());
         });
       });
   });
