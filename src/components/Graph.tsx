@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from "react";
 import cytoscape from "cytoscape";
+import { theme } from "../constants/theme";
+import { useAtom } from "jotai";
+import { selectedNodeId } from "../constants/atoms";
+
 const cola = require("cytoscape-cola");
 cytoscape.use(cola);
 
 function Graph() {
   const containerId = "cy";
-
-  const containerStyle = {
-    height: "100vh",
-    width: "100vw",
-    margin: "auto",
-    border: "1px solid",
-  };
+  const [selected, setSelected] = useAtom(selectedNodeId);
 
   useEffect(() => {
     const containerEle = document.getElementById(containerId);
@@ -22,9 +20,6 @@ function Graph() {
         const cy = cytoscape({
           elements: json,
           container: containerEle,
-          layout: {
-            name: "cola",
-          },
           style: [
             {
               selector: "node",
@@ -35,6 +30,7 @@ function Graph() {
                 "text-halign": "left",
                 width: 6,
                 height: 6,
+                "font-size": "8px",
               },
             },
             {
@@ -44,29 +40,57 @@ function Graph() {
                 "curve-style": "straight",
                 "target-arrow-shape": "triangle",
                 "arrow-scale": 0.5,
+                "line-color": theme.colors.alabaster.five,
+                "target-arrow-color": theme.colors.alabaster.five,
+                "source-arrow-color": theme.colors.alabaster.five,
               },
             },
           ],
         });
 
+        cy.layout({
+          name: "cola",
+        }).run();
+
+        // Detect node tap (Update state)
         cy.on("tap", "node", function (evt) {
           var node = evt.target;
-          console.log("tapped " + node.id());
+          setSelected(node.id());
+          console.log("selected " + node.id());
         });
 
+        // Change node color on tap
         cy.$("node").on("tap", function (e) {
-          var ele = e.target;
-          ele.connectedEdges().style({ "line-color": "red" });
+          var node = e.target;
+          node.style({ "background-color": theme.colors.green.three });
+          node.connectedEdges().style({
+            "line-color": theme.colors.green.one,
+            "target-arrow-color": theme.colors.green.one,
+            "source-arrow-color": theme.colors.green.one,
+          });
         });
 
-        // cy.$("node").on("free", function (e) {
-        //   var ele = e.target;
-        //   ele.connectedEdges().style({ "line-color": "#FAFAFA" });
-        // });
+        // Change node color back to default when deselected
+        cy.on("click", (event) => {
+          if (event.target === cy) {
+            // click on the background
+            cy.nodes().forEach((node) => {
+              node.connectedEdges().style({
+                "line-color": theme.colors.alabaster.five,
+                "target-arrow-color": theme.colors.alabaster.five,
+                "source-arrow-color": theme.colors.alabaster.five,
+              });
+              node.style({ "background-color": "black" });
+              node.children();
+            });
+          }
+        });
       });
   });
 
-  return <div id={containerId} style={containerStyle}></div>;
+  return (
+    <div className=" w-screen h-screen m-auto bg-ghost" id={containerId}></div>
+  );
 }
 
 export default Graph;
