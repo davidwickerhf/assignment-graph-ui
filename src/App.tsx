@@ -6,7 +6,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <div className="fixed left-0 bottom-0">
+        <div className="fixed right-4 bottom-4 z-10">
           <Panel></Panel>
         </div>
         <Graph></Graph>

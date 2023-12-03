@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import cytoscape from "cytoscape";
+import cytoscape, { NodeSingular } from "cytoscape";
 import { theme } from "../constants/theme";
-import { useAtom } from "jotai";
+import { useSetAtom } from "jotai";
 import { selectedNodeId } from "../constants/atoms";
 
 const cola = require("cytoscape-cola");
@@ -9,7 +9,21 @@ cytoscape.use(cola);
 
 function Graph() {
   const containerId = "cy";
-  const [selected, setSelected] = useAtom(selectedNodeId);
+  const setSelected = useSetAtom(selectedNodeId);
+
+  function resetNodes(cy: cytoscape.Core, ignore: string[] = []) {
+    cy.nodes().forEach((node) => {
+      if (!ignore.includes(node.id())) {
+        node.connectedEdges().style({
+          "line-color": theme.colors.alabaster.five,
+          "target-arrow-color": theme.colors.alabaster.five,
+          "source-arrow-color": theme.colors.alabaster.five,
+        });
+        node.style({ "background-color": "black" });
+        node.children();
+      }
+    });
+  }
 
   useEffect(() => {
     const containerEle = document.getElementById(containerId);
@@ -61,28 +75,26 @@ function Graph() {
 
         // Change node color on tap
         cy.$("node").on("tap", function (e) {
-          var node = e.target;
-          node.style({ "background-color": theme.colors.green.three });
+          var node: NodeSingular = e.target;
+          resetNodes(cy);
+
+          node.style({ "background-color": theme.colors.green.five });
           node.connectedEdges().style({
             "line-color": theme.colors.green.one,
             "target-arrow-color": theme.colors.green.one,
             "source-arrow-color": theme.colors.green.one,
           });
+          node
+            .neighborhood()
+            .style({ "background-color": theme.colors.green.one });
         });
 
         // Change node color back to default when deselected
         cy.on("click", (event) => {
           if (event.target === cy) {
             // click on the background
-            cy.nodes().forEach((node) => {
-              node.connectedEdges().style({
-                "line-color": theme.colors.alabaster.five,
-                "target-arrow-color": theme.colors.alabaster.five,
-                "source-arrow-color": theme.colors.alabaster.five,
-              });
-              node.style({ "background-color": "black" });
-              node.children();
-            });
+            setSelected(0);
+            resetNodes(cy);
           }
         });
       });
