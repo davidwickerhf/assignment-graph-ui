@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import cytoscape, { NodeSingular } from "cytoscape";
 import { theme } from "../constants/theme";
-import { useSetAtom } from "jotai";
+import { useSetAtom, useAtomValue } from "jotai";
 import { selectedNodeList } from "../constants/atoms";
+import { NodeInterface } from "../constants/types";
 
 const cola = require("cytoscape-cola");
 cytoscape.use(cola);
@@ -85,8 +86,15 @@ function Graph() {
 				// Detect node tap (Update state)
 				cy.on("tap", "node", function (evt) {
 					var node: NodeSingular = evt.target;
-					setSelected([node.id()]);
-					console.log("selected " + node.id());
+					let nodeData = json.filter((e: any) => e.data.id == node.id())[0];
+					let nodeObj: NodeInterface = {
+						id: Number(node.id()),
+						name: nodeData.data.name,
+						indegree: node.indegree(false),
+						outdegree: node.outdegree(false),
+						score: 0,
+					};
+					setSelected([nodeObj]);
 
 					resetNodes(cy);
 					styleNodes(cy, [node.id()]);
