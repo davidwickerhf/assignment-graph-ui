@@ -86,15 +86,15 @@ To facilitate styling, I decided to make use of the TailwindCSS library. Documen
 
 ## Requirements
 
-#### Requirement 1
+#### Requirement 1 (completed)
 
 > Allow the user to click a node and visualize information from it. (name, indegree, outdegree, any other you deem important)
 
-#### Requirement 2
+#### Requirement 2 (completed)
 
 > Highlight all the edges connected to the selected node after click. (currently the node turns blue after clicking, do the same for it edges).
 
-#### Requirement 3
+#### Requirement 3 (completed and persistent)
 
 > Allow the user to change the name of a node. (Does not need to be persistent, after refreshing the page the nodes could be the same as they originally were)
 

@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react";
 import cytoscape, { NodeSingular } from "cytoscape";
 import { theme } from "../constants/theme";
-import { useSetAtom, useAtom } from "jotai";
-import { selectedNodeList } from "../constants/atoms";
+import { useAtom, useAtomValue } from "jotai";
+import { search, selectedNodeList } from "../constants/atoms";
 import { NodeInterface } from "../constants/types";
 
 const cola = require("cytoscape-cola");
@@ -11,6 +11,7 @@ cytoscape.use(cola);
 function Graph() {
 	const containerId = "cy";
 	const [selected, setSelected] = useAtom(selectedNodeList);
+	const searchName = useAtomValue(search);
 	const [cyto, setCyto] = useState<cytoscape.Core>();
 
 	function syncData(node: NodeInterface) {
@@ -144,6 +145,7 @@ function Graph() {
 		});
 	}
 
+	// INITIALIZE GRAPH
 	useEffect(() => {
 		const containerEle = document.getElementById(containerId);
 
@@ -186,6 +188,7 @@ function Graph() {
 		}
 	}, []);
 
+	// WHEN SELECTION LABEL CHANGES, UPDATE GRAPH LABEL
 	useEffect(() => {
 		if (selected.length == 1) {
 			let el = cyto?.getElementById(selected[0].id.toString());
@@ -193,6 +196,15 @@ function Graph() {
 			syncData(selected[0]);
 		}
 	}, [selected]);
+
+	// UPDATE FILTER
+	useEffect(() => {
+		if (searchName.length > 0) {
+			// Filter graph
+		} else {
+			// Return unfiltered grapjh
+		}
+	}, [searchName]);
 
 	return (
 		<div className=" w-screen h-screen m-auto bg-ghost" id={containerId}></div>
