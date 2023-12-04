@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NodeInterface } from "../constants/types";
+import { nameError, selectedNodeList } from "../constants/atoms";
+import { useAtom, useSetAtom } from "jotai";
 
 interface PanelInterface {
 	node: NodeInterface;
@@ -7,7 +9,22 @@ interface PanelInterface {
 
 export const PanelItem = ({ node }: PanelInterface) => {
 	const [open, setOpen] = useState(true);
+	const [selected, setSelected] = useAtom(selectedNodeList);
 	const [value, setValue] = useState(node.name);
+	const setError = useSetAtom(nameError);
+
+	useEffect(() => {
+		if (value.length < 1) {
+			setError(true);
+			return;
+		}
+		// Update state
+		let temp = selected;
+		let el = temp.filter((el) => el.id == node.id)[0];
+		temp = temp.filter((el) => el.id != node.id);
+		setSelected([...temp, { ...el, name: value }]);
+		setError(false);
+	}, [value]);
 
 	return (
 		<div

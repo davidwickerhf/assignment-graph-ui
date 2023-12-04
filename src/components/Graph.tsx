@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import cytoscape, { NodeSingular } from "cytoscape";
 import { theme } from "../constants/theme";
-import { useSetAtom, useAtomValue } from "jotai";
+import { useSetAtom, useAtom } from "jotai";
 import { selectedNodeList } from "../constants/atoms";
 import { NodeInterface } from "../constants/types";
 
@@ -10,7 +10,8 @@ cytoscape.use(cola);
 
 function Graph() {
 	const containerId = "cy";
-	const setSelected = useSetAtom(selectedNodeList);
+	const [selected, setSelected] = useAtom(selectedNodeList);
+	const [cyto, setCyto] = useState<cytoscape.Core>();
 
 	function resetNodes(cy: cytoscape.Core, targets: string[] = []) {
 		cy.nodes().forEach((node) => {
@@ -79,20 +80,16 @@ function Graph() {
 					],
 				});
 
-				cy.layout({
-					name: "cola",
-				}).run();
-
 				// Detect node tap (Update state)
 				cy.on("tap", "node", function (evt) {
 					var node: NodeSingular = evt.target;
 					let nodeData = json.filter((e: any) => e.data.id == node.id())[0];
 					let nodeObj: NodeInterface = {
 						id: Number(node.id()),
-						name: nodeData.data.name,
+						name: node.renderedStyle("label"),
 						indegree: node.indegree(false),
 						outdegree: node.outdegree(false),
-						score: 0,
+						score: nodeData.data.score,
 					};
 					setSelected([nodeObj]);
 
@@ -108,8 +105,21 @@ function Graph() {
 						resetNodes(cy);
 					}
 				});
+
+				cy.layout({
+					name: "cola",
+				}).run();
+
+				setCyto(cy);
 			});
 	}, []);
+
+	useEffect(() => {
+		if (selected.length == 1) {
+			let el = cyto?.getElementById(selected[0].id.toString());
+			el?.style("label", selected[0].name);
+		}
+	}, [selected]);
 
 	return (
 		<div className=" w-screen h-screen m-auto bg-ghost" id={containerId}></div>

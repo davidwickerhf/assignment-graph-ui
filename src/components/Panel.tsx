@@ -6,6 +6,7 @@ import { NodeInterface } from "../constants/types";
 
 export const Panel = () => {
 	const selected = useAtomValue(selectedNodeList);
+	console.log("SELECTED: ", selected);
 
 	return (
 		<div className="bg-dark-five rounded-lg  text-white min-w-[350px]">

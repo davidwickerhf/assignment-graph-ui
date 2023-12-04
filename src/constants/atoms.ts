@@ -15,3 +15,5 @@ export const addSelectedNode = atom(
 			);
 	}
 );
+
+export const nameError = atom(false);
