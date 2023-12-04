@@ -16,7 +16,7 @@ function Graph() {
 
 	function syncData(node: NodeInterface) {
 		if (!localStorage.getItem("data")) {
-			const data = fetch("/data.json")
+			const _ = fetch("/data.json")
 				.then((res: any) => res.json())
 				.then((json: any) => {
 					// Retrieve prev. node raw data
@@ -199,10 +199,22 @@ function Graph() {
 
 	// UPDATE FILTER
 	useEffect(() => {
-		if (searchName.length > 0) {
-			// Filter graph
-		} else {
-			// Return unfiltered grapjh
+		console.log("Updating filter");
+		if (localStorage.getItem("data") && cyto) {
+			if (searchName.length > 0) {
+				// Filter graph
+				//let data = JSON.parse(localStorage.getItem("data")!);
+				console.log("Filter: ");
+				let filterOut = cyto.nodes().filter((ele) => {
+					let label: string = ele.renderedStyle("label").toUpperCase();
+					return !label.includes(searchName.toUpperCase());
+				});
+
+				var connected = cyto.elements().not(filterOut);
+				console.log("Filtered: ", connected);
+			} else {
+				// Return unfiltered grapjh
+			}
 		}
 	}, [searchName]);
 
